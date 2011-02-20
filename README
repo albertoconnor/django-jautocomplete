@@ -1,0 +1,63 @@
+iqc.apps.autocomplete
+
+Current it only supports autocompletion for foreignkeys based on the target models
+__unicode__ representation.
+
+Basic Usage
+
+in an admin.py:
+
+# Assuming that MainModel has a foreignkey relationship with TargetModel
+from django.contrib import admin
+from myapp.models import MainModel, TargetModel
+
+from iqc.apps.autocomplete.admin import AutocompleteModelAdmin, AutocompleteTargetModelAdmin
+
+admin.site.register(TargetModel, AutocompleteTargetModelAdmin)
+# You can also have your own model admin class, but it must inherit from
+# AutocompleteTargetModelAdmin
+
+class MainModelAdmin(AutocompleteModelAdmin):
+    #...
+    autocomplete_fields = ('field_name',)
+    #...
+    
+---
+
+Now in the admin for the MainModel the foreignkey field should now be an
+autocompletion field rather than a select.  If javascript is disabled it will
+still be a select.
+
+Note that 'field_name' needs to be a foreignkey field on the MainModel or it
+will just be ignored.
+
+Required Media
+
+The autocomplete widget has the following media requiremenets:
+
+class Media:
+    css = {
+            'all': ('%scss/jquery.autocomplete.css' % settings.MEDIA_URL,)
+    }
+    js = (
+            '%s/js/jquery.js' % settings.MEDIA_URL,
+            '%s/js/jquery.autocomplete.js' % settings.MEDIA_URL,
+            '%s/js/autocomplete.popup.js ' % settings.MEDIA_URL
+    )
+
+---
+
+jquery.js: http://jquery.com/
+jquery.autocomplete.js: http://bassistance.de/jquery-plugins/jquery-plugin-autocomplete/
+   - Also provides the jquery.autocomplete.css
+
+autocomplete.popup.js can be found in the iqc media directory and must be copied
+your sites media_url.
+
+Note this doesn't leverage the admin's version of jquery, you need to provide
+your own in your own sites media_url.
+
+Problems
+
+If the add functionality isn't working, then you have likely not registered the
+TargetModel with an AutocompleteTargetModelAdmin or subclass.
