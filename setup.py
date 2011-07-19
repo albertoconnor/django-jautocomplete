@@ -15,9 +15,9 @@ setup(
     url='http://albertoconnor.ca',
     download_url='',
     classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 3 - Alpha",
         "Framework :: Django",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
         "Topic :: Software Development"
     ],
