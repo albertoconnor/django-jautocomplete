@@ -61,12 +61,11 @@ class SelectAutocompleteInput(forms.widgets.Select):
     """
     class Media:
         css = {
-                'all': ('%scss/jquery.autocomplete.css' % settings.MEDIA_URL,)
+                'all': ('%scss/jquery.autocomplete.css' % settings.STATIC_URL,)
         }
         js = (
-                '%sjs/jquery.js' % settings.MEDIA_URL,
-                '%sjs/jquery.autocomplete.js' % settings.MEDIA_URL,
-                '%sjs/autocomplete.popup.js ' % settings.MEDIA_URL
+                '%sjs/lib/jquery.autocomplete.js' % settings.STATIC_URL,
+                '%sjs/autocomplete.popup.js ' % settings.STATIC_URL
         )
 
     #def text_field_value(self, value):
@@ -89,7 +88,7 @@ class SelectAutocompleteInput(forms.widgets.Select):
         else:
             text_field_value = u''
         return rendered + mark_safe(javascript_template % {
-                            'MEDIA_URL': settings.MEDIA_URL,
+                            'MEDIA_URL': settings.STATIC_URL,
                             'text_field_value': text_field_value,
                             'text_field_size': 40,
                             'name': name,
