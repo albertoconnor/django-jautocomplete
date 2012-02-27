@@ -43,6 +43,7 @@ $(document).ready(function(){
     
     // Changing the autocomplete field needs to change the hidden select field
     $("#lookup_{{ name }}").change(function() {
+        $("#id_{{ name }}_new").val(''); // The _new field overrides the select always, needs to be clear if the value is now in the select.
         new_value = {{ name }}_id_map[$(this).val()];
         if (new_value == undefined) {
             $("#id_{{ name }}_new").val($(this).val());
