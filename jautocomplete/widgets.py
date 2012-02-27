@@ -1,8 +1,37 @@
 from django.conf import settings
 from django import forms
+from django.forms.util import flatatt
 from django.db import models
+from django.template.loader import render_to_string
 
 from django.utils.safestring import mark_safe
+
+class ComboInput(forms.widgets.Select):
+    def value_from_datadict(self, data, files, name):
+        return (data.get(name, None), data.get("%s_new" % name, None))
+        
+    def render(self, name, value, attrs=None):
+        rendered = super(ComboInput, self).render(name, value, attrs)
+        return rendered + mark_safe('or new value: <input type="text" id="id_%s_new" name="%s_new" value=""/>' % (name,name))
+        
+class ComboAutocompleteInput(ComboInput):
+    
+    class Media:
+        css = {
+                'all': ('%scss/jquery.autocomplete.css' % settings.STATIC_URL,)
+        }
+        js = (
+                '%sjs/lib/jquery.autocomplete.js' % settings.STATIC_URL,
+        )
+    
+    def render(self, name, value, attrs=None):
+        rendered = super(ComboAutocompleteInput, self).render(name, value, attrs)
+        if value is None or value == (u'', u''):
+            value = ""
+        return render_to_string("jautocomplete/_comboautocompleteinput.html", dict(name=name,
+                                                                                   value=value,
+                                                                                   attr=flatatt(attrs),
+                                                                                   rendered=rendered))
 
 class ForeignKeyAutocompleteInput(forms.widgets.Select):
     """
@@ -12,12 +41,11 @@ class ForeignKeyAutocompleteInput(forms.widgets.Select):
     """
     class Media:
         css = {
-                'all': ('%scss/jquery.autocomplete.css' % settings.MEDIA_URL,)
+                'all': ('%scss/jquery.autocomplete.css' % settings.STATIC_URL,)
         }
         js = (
-                '%sjs/jquery.js' % settings.MEDIA_URL,
-                '%sjs/jquery.autocomplete.js' % settings.MEDIA_URL,
-                '%sjs/autocomplete.popup.js ' % settings.MEDIA_URL
+                '%sjs/lib/jquery.autocomplete.js' % settings.STATIC_URL,
+                '%sjs/autocomplete.popup.js ' % settings.STATIC_URL
         )
 
     def text_field_value(self, value):
