@@ -26,8 +26,18 @@ class ComboAutocompleteInput(ComboInput):
     
     def render(self, name, value, attrs=None):
         rendered = super(ComboAutocompleteInput, self).render(name, value, attrs)
-        if value is None or value == (u'', u''):
+        if value is None or value == (u'', u''): # Handle the blank case correctly
             value = ""
+        try: # Handle the pre existing value case correctly
+            pk = int(value)
+            # Depending on internal details, this may not be the best way, and doesn't correctly support to_field_name
+            try:
+                value_obj = self.choices.queryset.model.objects.get(pk=pk)
+                value = unicode(value_obj)
+            except self.choices.queryset.model.DoesNotExist:
+                value = ''
+        except ValueError:
+            pass
         return render_to_string("jautocomplete/_comboautocompleteinput.html", dict(name=name,
                                                                                    value=value,
                                                                                    attr=flatatt(attrs),
