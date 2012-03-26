@@ -7,10 +7,16 @@ class ComboModelChoiceField(forms.ModelChoiceField):
     
     widget = ComboInput
     
+    def new_object_from_value(self, value):
+        """Override to change the behavior of transforming a novel value into
+        a new instance of the model. Returned value will have .save() called on it
+        """
+        return self.queryset.model(name=new_value)
+    
     def to_python(self, value):
         select_value, new_value = value
         if not new_value in EMPTY_VALUES:
-            new_model = self.queryset.model(name=new_value)
+            new_model = self.new_object_from_value(value)
             # Check to make sure it is valid, allow an option function call on the model to initialize
             new_model.save()
             return new_model
