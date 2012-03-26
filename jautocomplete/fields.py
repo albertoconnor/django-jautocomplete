@@ -16,7 +16,7 @@ class ComboModelChoiceField(forms.ModelChoiceField):
     def to_python(self, value):
         select_value, new_value = value
         if not new_value in EMPTY_VALUES:
-            new_model = self.new_object_from_value(value)
+            new_model = self.new_object_from_value(new_value)
             # Check to make sure it is valid, allow an option function call on the model to initialize
             new_model.save()
             return new_model
