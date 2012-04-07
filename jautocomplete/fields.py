@@ -11,7 +11,7 @@ class ComboModelChoiceField(forms.ModelChoiceField):
         """Override to change the behavior of transforming a novel value into
         a new instance of the model. Returned value will have .save() called on it
         """
-        return self.queryset.model(name=new_value)
+        return self.queryset.model(name=value)
     
     def to_python(self, value):
         select_value, new_value = value
