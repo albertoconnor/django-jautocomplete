@@ -3,6 +3,12 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+import os
+PATH = os.path.abspath(os.path.dirname(__file__))
+
+def relative(path):
+    return os.path.abspath(os.path.join(PATH, path))
+
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
@@ -11,8 +17,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': relative('data.db'),                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -52,6 +58,8 @@ MEDIA_ROOT = ''
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = ''
 
+STATIC_URL = "/static/"
+
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
@@ -78,6 +86,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'autocomplete_test.urls'
 
 TEMPLATE_DIRS = (
+    relative('templates')
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -89,8 +98,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.staticfiles',
+    'django.contrib.admin',
+    'autocomplete_test.example',
+    'jautocomplete'
 )

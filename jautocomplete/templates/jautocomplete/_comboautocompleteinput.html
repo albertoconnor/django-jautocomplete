@@ -1,0 +1,68 @@
+<span id="id_{{ name }}_widget_wrap">
+    {{ rendered|safe }}
+</span>
+<input type="text" id="lookup_{{ name }}" value="{{ value }}" {{ attrs }} style="display: none;"/>
+<script type="text/javascript">
+
+$(document).ready(function(){
+    // Javascript is required to show the autocomplete field and hide the select field.
+    $("#id_{{ name }}_widget_wrap").hide();
+    $("#lookup_{{ name }}").show();
+
+    function liFormat_{{ name }}(row, i, num) {
+            var result = row[0] ;
+            return result;
+    }
+    
+    var {{ name }}_data = Array();
+    var {{ name }}_id_map = {};
+    
+    function load_autocomplete_data_from_select() {
+        {{ name }}_data = Array();
+        {{ name }}_id_map = {};
+        $("#id_{{ name }} option").each(function(d) {
+            var value = $(this).html() 
+            {{ name }}_data.push(value);
+            {{ name }}_id_map[value] = $(this).val();
+        })
+        
+        $("#lookup_{{ name }}").autocomplete({{ name }}_data, {
+            delay:10,
+            minChars:1,
+            matchSubset:1,
+            autoFill:false,
+            matchContains:1,
+            cacheLength:10,
+            selectFirst:true,
+            formatItem:liFormat_{{ name }},
+            maxItemsToShow:10
+        }); 
+    }
+    
+    load_autocomplete_data_from_select(); // Inital load
+    
+    // Changing the autocomplete field needs to change the hidden select field
+    $("#lookup_{{ name }}").change(function() {
+        $("#id_{{ name }}_new").val(''); // The _new field overrides the select always, needs to be clear if the value is now in the select.
+        new_value = {{ name }}_id_map[$(this).val()];
+        if (new_value == undefined) {
+            $("#id_{{ name }}_new").val($(this).val());
+        } else {
+            $("#id_{{ name }}").val(new_value);
+        }
+    })
+    
+    // It is possible to "change" the autocomplete text field and have the change
+    // event not happen.  This double checks right before we submit.
+    $("form").submit(function() {
+        $("#lookup_{{ name }}").change(); // Just to make sure
+    })
+    
+    // When the add feature is used, it only knows how to change the select field
+    // so the autocomplete field needs to be updated too.
+    $("#id_{{ name }}").change(function () {
+        $("#lookup_{{ name }}").val($(this).find("option:selected").html());
+        load_autocomplete_data_from_select(); // Could be a new value from an add
+    })    
+});
+</script>

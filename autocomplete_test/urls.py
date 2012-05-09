@@ -5,6 +5,8 @@ from django.conf.urls.defaults import *
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^$', 'autocomplete_test.example.views.test'),
+    url(r'^(.+)$', 'autocomplete_test.example.views.test'),
     # Example:
     # (r'^autocomplete_test/', include('autocomplete_test.foo.urls')),
 

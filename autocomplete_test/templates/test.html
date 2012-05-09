@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>Test</title>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
+        {{ form.media }}
+    </head>
+    <body>
+        <form method="post">
+            {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit"/>
+        </form>
+    </body>
+</html>
+ 
