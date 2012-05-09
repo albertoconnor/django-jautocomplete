@@ -7,7 +7,6 @@ from django.utils.translation import ugettext as _
 from django.utils.html import escape
 from django.utils.encoding import force_unicode
 
-from django.contrib.auth.models import Message
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 
 from widgets import ForeignKeyAutocompleteInput
