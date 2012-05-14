@@ -28,6 +28,8 @@ class ComboAutocompleteInput(ComboInput):
         rendered = super(ComboAutocompleteInput, self).render(name, value, attrs)
         if value is None or value == (u'', u''): # Handle the blank case correctly
             value = ""
+        if isinstance(value, tuple):
+            value = value[0] # handle the form isn't valid case
         try: # Handle the pre existing value case correctly
             pk = int(value)
             # Depending on internal details, this may not be the best way, and doesn't correctly support to_field_name
